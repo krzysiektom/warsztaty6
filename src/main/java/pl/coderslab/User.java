@@ -19,9 +19,12 @@ public class User {
     @NotEmpty
     private String lastName;
 
-    @Email
-    private String email;
+    @NotEmpty
+    private String password;
 
+    @Email
+    @NotEmpty
+    private String email;
 
     public User() {
     }
@@ -50,6 +53,14 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -58,5 +69,14 @@ public class User {
         this.email = email;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
