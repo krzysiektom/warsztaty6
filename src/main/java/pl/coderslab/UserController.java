@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.WebParam;
 import java.util.List;
 
 @Controller
@@ -63,7 +62,7 @@ public class UserController {
         if (result.hasErrors()) {
             return "formUser";
         }
-        if (userService.isNotExistEmail(user)) {
+        if (userService.validateEditUser(user)) {
             userRepository.save(user);
             return "redirect:/";
         } else {

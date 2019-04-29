@@ -15,7 +15,11 @@ public class UserService {
 
     boolean isNotExistEmail(User userValidate) {
         User user = userRepository.findByEmail(userValidate.getEmail());
-        System.out.println(user);
         return null == user;
+    }
+
+    boolean validateEditUser(User userValidate) {
+        User user = userRepository.findByEmail(userValidate.getEmail());
+        return null == user || userValidate.getId() == user.getId();
     }
 }
