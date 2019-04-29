@@ -1,6 +1,7 @@
 package pl.coderslab;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -13,17 +14,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @NotBlank(groups = ValidationUser.class)
     private String firstName;
 
-    @NotEmpty
+    @NotBlank(groups = ValidationUser.class)
     private String lastName;
 
-    @NotEmpty
+    @NotBlank(groups = {ValidationUser.class, ValidationLogin.class})
     private String password;
 
-    @Email
-    @NotEmpty
+    @Email(groups = {ValidationUser.class, ValidationLogin.class})
+    @NotBlank(groups = {ValidationUser.class, ValidationLogin.class})
     private String email;
 
     public User() {
