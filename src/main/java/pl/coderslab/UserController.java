@@ -99,4 +99,9 @@ public class UserController {
             return "loginPage";
         }
     }
+
+    @GetMapping("/page")
+    public String userPage(){
+        return "userPage";
+    }
 }
