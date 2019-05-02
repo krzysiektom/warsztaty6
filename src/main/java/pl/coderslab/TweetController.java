@@ -30,7 +30,7 @@ public class TweetController {
 
     @ModelAttribute("allTweets")
     public List<Tweet> getAllTweets() {
-        return tweetRepository.findAll();
+        return tweetRepository.getAllOrderByCreatedDesc();
     }
 
     @GetMapping("/all")
@@ -38,21 +38,21 @@ public class TweetController {
         return "allTweets";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/main")
     public String addForm(Model model) {
         Tweet tweet = new Tweet();
         model.addAttribute(tweet);
-        return "formTweet";
+        return "mainPage";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/main")
     public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result){
         if (result.hasErrors()){
-            return "formTweet";
+            return "mainPage";
         }
         tweet.setUser(userRepository.findOne(tweet.getUser().getId()));
 
         tweetRepository.save(tweet);
-        return "redirect:/tweet/all";
+        return "redirect:/tweet/main";
     }
 }

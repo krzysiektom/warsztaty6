@@ -92,7 +92,7 @@ public class UserController {
             return "loginPage";
         }
         if (userService.validateUser(user)) {
-            return "redirect:/";
+            return "redirect:/tweet/main";
         } else {
             model.addAttribute("error", true);
             model.addAttribute("errorMsg", "Błędny login lub hasło");
