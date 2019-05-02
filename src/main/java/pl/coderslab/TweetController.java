@@ -33,9 +33,19 @@ public class TweetController {
         return tweetRepository.getAllOrderByCreatedDesc();
     }
 
+    @ModelAttribute("userAllTweets")
+    public List<Tweet> getUserAllTweets() {
+        return tweetRepository.getAllByUserIdOrderByCreatedDesc(1L);
+    }
+
     @GetMapping("/all")
     public String showAllTweets() {
         return "allTweets";
+    }
+
+    @GetMapping("/user")
+    public String showUserAllTweets() {
+        return "userTweets";
     }
 
     @GetMapping("/main")
@@ -46,8 +56,8 @@ public class TweetController {
     }
 
     @PostMapping("/main")
-    public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result){
-        if (result.hasErrors()){
+    public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result) {
+        if (result.hasErrors()) {
             return "mainPage";
         }
         tweet.setUser(userRepository.findOne(tweet.getUser().getId()));

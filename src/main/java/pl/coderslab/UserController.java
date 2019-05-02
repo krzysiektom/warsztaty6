@@ -87,7 +87,6 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginUser(@ModelAttribute("user") @Validated({ValidationLogin.class}) User user, BindingResult result, Model model) {
-        System.out.println(result);
         if (result.hasErrors()) {
             return "loginPage";
         }

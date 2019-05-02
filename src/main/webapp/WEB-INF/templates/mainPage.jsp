@@ -14,6 +14,8 @@
     <title>mainPage</title>
 </head>
 <body>
+<a href="/tweet/user">User Tweets</a>
+<a href="/user/page">User Page</a>
 <form:form method="post" modelAttribute="tweet">
     <form:errors path="text"/><br>
     firstName: <form:input path="text"/><br>
