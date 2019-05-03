@@ -18,15 +18,16 @@ public class TweetController {
     @Autowired
     TweetRepository tweetRepository;
 
-    //czasowo do momeentu potweierdzenia logowania
+    @Autowired
+    AuthHandler authHandler;
+
     @Autowired
     UserRepository userRepository;
 
-    @ModelAttribute("allUsers")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @ModelAttribute(name = "userName", value = "userName")
+    public String userName() {
+        return authHandler.getName();
     }
-    //usunąć
 
     @ModelAttribute("allTweets")
     public List<Tweet> getAllTweets() {
@@ -50,19 +51,26 @@ public class TweetController {
 
     @GetMapping("/main")
     public String addForm(Model model) {
-        Tweet tweet = new Tweet();
-        model.addAttribute(tweet);
-        return "mainPage";
+        if (authHandler.isLogged()) {
+            Tweet tweet = new Tweet();
+            model.addAttribute(tweet);
+            return "mainPage";
+        } else {
+            return "redirect:/tweet/all";
+        }
     }
 
     @PostMapping("/main")
     public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result) {
-        if (result.hasErrors()) {
-            return "mainPage";
+        if (authHandler.isLogged()) {
+            if (result.hasErrors()) {
+                return "mainPage";
+            }
+            tweet.setUser(userRepository.findOne(authHandler.getId()));
+            tweetRepository.save(tweet);
+            return "redirect:/tweet/main";
+        } else {
+            return "redirect:/tweet/all";
         }
-        tweet.setUser(userRepository.findOne(tweet.getUser().getId()));
-
-        tweetRepository.save(tweet);
-        return "redirect:/tweet/main";
     }
 }

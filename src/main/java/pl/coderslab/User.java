@@ -18,17 +18,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = ValidationUser.class)
+    @NotBlank
     private String firstName;
 
-    @NotBlank(groups = ValidationUser.class)
+    @NotBlank
     private String lastName;
 
-    @NotBlank(groups = {ValidationUser.class, ValidationLogin.class})
+    @NotBlank
     private String password;
 
-    @Email(groups = {ValidationUser.class, ValidationLogin.class})
-    @NotBlank(groups = {ValidationUser.class, ValidationLogin.class})
+    @Email
+    @NotBlank
     private String email;
 
     @JsonIgnore

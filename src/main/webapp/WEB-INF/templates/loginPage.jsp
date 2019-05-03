@@ -19,13 +19,11 @@
     <p>${errorMsg}</p>
 </c:if>
 
-<form:form method="post" modelAttribute="user">
-    <form:errors path="email"/><br>
-    email: <form:input path="email"/><br>
-    <form:errors path="password"/><br>
-    password: <form:input path="password"/><br>
-    <input type="submit" value="Save"/>
-</form:form>
+<form method="post" >
+    email: <input type="text" name="email"/><br>
+    password: <input type="password" name="password"/><br>
+    <input type="submit" value="Login"/>
+</form>
 <a href="/user/add">Zarejestruj się</a>
 </body>
 </html>

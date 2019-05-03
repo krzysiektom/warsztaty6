@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -17,6 +18,14 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AuthHandler authHandler;
+
+    @ModelAttribute(name = "userName", value = "userName")
+    public String userName() {
+        return authHandler.getName();
+    }
 
     @ModelAttribute("allUsers")
     public List<User> getAllUsers() {
@@ -36,13 +45,14 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public String addUser(@ModelAttribute("user") @Validated({ValidationUser.class}) User user, BindingResult result, Model model) {
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "formUser";
         }
         if (userService.isNotExistEmail(user)) {
             userRepository.save(user);
-            return "redirect:/";
+            userService.setSession(user);
+            return "redirect:/user/page";
         } else {
             model.addAttribute("error", true);
             model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");
@@ -50,32 +60,60 @@ public class UserController {
         }
     }
 
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
-        User user = userRepository.findOne(id);
-        model.addAttribute("user", user);
-        return "formUser";
+    @GetMapping("/edit")
+    public String editForm(Model model) {
+        if (authHandler.isLogged()) {
+            User user = userRepository.findOne(authHandler.getId());
+            model.addAttribute("user", user);
+            return "formUser";
+        } else {
+            return "redirect:/tweet/all";
+        }
     }
 
-    @PostMapping("/edit/{id}")
-    public String editUser(@ModelAttribute("user") @Validated({ValidationUser.class}) User user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "formUser";
+    @PostMapping("/edit")
+    public String editUser(@ModelAttribute("user") @Valid User user, BindingResult result, Model model) {
+        if (authHandler.isLogged()) {
+            if (result.hasErrors()) {
+                return "formUser";
+            }
+            if (userService.validateEditUser(user)) {
+                userRepository.save(user);
+                userService.setSession(user);
+                return "redirect:/";
+            } else {
+                model.addAttribute("error", true);
+                model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");
+                return "formUser";
+            }
+        } else {
+            return "redirect:/tweet/all";
         }
-        if (userService.validateEditUser(user)) {
-            userRepository.save(user);
-            return "redirect:/";
+    }
+
+    @GetMapping("/delete")
+    public String deleteUser() {
+        if (authHandler.isLogged()) {
+            userRepository.delete(authHandler.getId());
+        }
+        return "redirect:/tweet/all";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        authHandler.setLogged(false);
+        return "redirect:/tweet/all";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        if (userService.validateUserAndSetSession(email, password)) {
+            return "redirect:/tweet/main";
         } else {
             model.addAttribute("error", true);
-            model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");
-            return "formUser";
+            model.addAttribute("errorMsg", "Błędny login lub hasło");
+            return "loginPage";
         }
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id){
-        userRepository.delete(id);
-        return "redirect:/user/all";
     }
 
     @GetMapping("/login")
@@ -85,22 +123,12 @@ public class UserController {
         return "loginPage";
     }
 
-    @PostMapping("/login")
-    public String loginUser(@ModelAttribute("user") @Validated({ValidationLogin.class}) User user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "loginPage";
-        }
-        if (userService.validateUser(user)) {
-            return "redirect:/tweet/main";
-        } else {
-            model.addAttribute("error", true);
-            model.addAttribute("errorMsg", "Błędny login lub hasło");
-            return "loginPage";
-        }
-    }
-
     @GetMapping("/page")
-    public String userPage(){
-        return "userPage";
+    public String userPage() {
+        if (authHandler.isLogged()) {
+            return "userPage";
+        } else {
+            return "redirect:/tweet/all";
+        }
     }
 }

@@ -14,13 +14,14 @@
     <title>mainPage</title>
 </head>
 <body>
+<a>Witaj ${userName}</a>
 <a href="/tweet/user">User Tweets</a>
 <a href="/user/page">User Page</a>
+<a href="/user/logout">Logout</a>
+
 <form:form method="post" modelAttribute="tweet">
     <form:errors path="text"/><br>
-    firstName: <form:input path="text"/><br>
-    <form:errors path="user" /><br>
-    publisher: <form:select path="user.id" items="${allUsers}" itemLabel="lastName" itemValue="id"/><br>
+    tweet: <form:input path="text"/><br>
     <input type="submit" value="Save"/>
 </form:form>
 

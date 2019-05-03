@@ -10,9 +10,7 @@
 <a href="/user/add">Add User</a><br>
 <a href="/user/all">All User</a><br>
 <a href="/user/login">Login User</a><br>
-<a href="/user/page">User Page</a><br>
 <a href="/tweet/all">All Tweet</a><br>
-<a href="/tweet/add">add Tweet</a><br>
 
 
 </body>

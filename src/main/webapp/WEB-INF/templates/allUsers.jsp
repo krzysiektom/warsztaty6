@@ -22,7 +22,6 @@
             <td>${user.lastName}</td>
             <td>${user.email}</td>
             <td>${user.password}</td>
-            <td><a href="edit/${user.id}">Edit</a> <a href="delete/${user.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

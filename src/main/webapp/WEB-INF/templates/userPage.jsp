@@ -7,8 +7,8 @@
     <title>userPage</title>
 </head>
 <body>
-<a href="/user/edit/{id}">Edit User</a><br>
-<a href="/user/delete/{id}">Delete User</a><br>
+<a href="/user/edit">Edit User</a><br>
+<a href="/user/delete">Delete User</a><br>
 
 </body>
 </html>

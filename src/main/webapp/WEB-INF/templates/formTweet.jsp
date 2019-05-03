@@ -17,8 +17,6 @@
 <form:form method="post" modelAttribute="tweet">
     <form:errors path="text"/><br>
     firstName: <form:input path="text"/><br>
-    <form:errors path="user" /><br>
-    publisher: <form:select path="user.id" items="${allUsers}" itemLabel="lastName" itemValue="id"/><br>
     <input type="submit" value="Save"/>
 </form:form>
 </body>
