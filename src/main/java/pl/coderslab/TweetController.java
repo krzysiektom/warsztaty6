@@ -21,7 +21,10 @@ public class TweetController {
     @Autowired
     UserRepository userRepository;
 
-    @ModelAttribute(name = "userName", value = "userName")
+    @Autowired
+    CommentRepository commentRepository;
+
+    @ModelAttribute("userName")
     public String userName() {
         return authHandler.getName();
     }
@@ -39,11 +42,6 @@ public class TweetController {
     @GetMapping("/all")
     public String showAllTweets() {
         return "allTweets";
-    }
-
-    @GetMapping("/user")
-    public String showUserAllTweets() {
-        return "userTweets";
     }
 
     @GetMapping("/main")
@@ -72,8 +70,40 @@ public class TweetController {
     }
 
     @GetMapping("/{id}")
-    public String tweetDetails(@PathVariable Long id, Model model){
-        model.addAttribute("tweet", tweetRepository.findOne(id));
-        return "tweetPage";
+    public String tweetDetails(@PathVariable Long id, Model model) {
+        if (authHandler.isLogged()) {
+            model.addAttribute("tweet", tweetRepository.findOne(id));
+            Comment comment = new Comment();
+            model.addAttribute(comment);
+            model.addAttribute("allComments", commentRepository.getAllByTweetIdOrderByCreatedDesc(id));
+            return "tweetPage";
+        } else {
+            return "redirect:/tweet/all";
+        }
+    }
+
+    @PostMapping("/{id}")
+    public String addComment(@ModelAttribute("comment") @Valid Comment comment, @PathVariable Long id, BindingResult result) {
+        if (authHandler.isLogged()) {
+            if (result.hasErrors()) {
+                return "tweetPage";
+            } else {
+                comment.setTweet(tweetRepository.findOne(id));
+                comment.setUser(userRepository.findOne(authHandler.getId()));
+                commentRepository.save(comment);
+                return "redirect:/tweet/{id}";
+            }
+        } else {
+            return "redirect:/tweet/all";
+        }
+    }
+
+    @GetMapping("/user")
+    public String userTweets() {
+        if (authHandler.isLogged()) {
+            return "userTweets";
+        } else {
+            return "redirect:/tweet/all";
+        }
     }
 }

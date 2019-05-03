@@ -1,6 +1,5 @@
 package pl.coderslab;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.SimpleResultTreeImpl;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;

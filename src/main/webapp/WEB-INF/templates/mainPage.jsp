@@ -18,19 +18,20 @@
 <a href="/tweet/user">User Tweets</a>
 <a href="/user/page">User Page</a>
 <a href="/user/logout">Logout</a>
-
-<form:form method="post" modelAttribute="tweet">
-    <form:errors path="text"/><br>
-    tweet: <form:input path="text"/><br>
-    <input type="submit" value="Save"/>
-</form:form>
+<div>
+    <form:form method="post" modelAttribute="tweet">
+        <form:errors path="text"/><br>
+        tweet: <form:input path="text"/><br>
+        <input type="submit" value="Save"/>
+    </form:form>
+</div>
 
 <div>
     <c:forEach items="${allTweets}" var="tweet">
         <div>
             <a>${tweet.user.firstName} ${tweet.user.lastName}</a><br>
             <a>${tweet.created}</a><br>
-            <a>${tweet.text}</a>
+            <a>${tweet.text}</a><a href="/tweet/${tweet.id}"> Tweet Details</a>
         </div>
     </c:forEach>
 </div>

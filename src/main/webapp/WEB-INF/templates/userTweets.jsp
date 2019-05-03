@@ -14,12 +14,13 @@
     <title>UserTweets</title>
 </head>
 <body>
-
-<c:forEach items="${userAllTweets}" var="tweet">
-    <div>
-        <a>${tweet.created}</a><br>
-        <a>${tweet.text}</a>
-    </div>
-</c:forEach>
+<div>
+    <c:forEach items="${userAllTweets}" var="tweet">
+        <div>
+            <a>${tweet.created}</a><br>
+            <a>${tweet.text}</a> <a href="/tweet/${tweet.id}">Details</a>
+        </div>
+    </c:forEach>
+</div>
 </body>
 </html>

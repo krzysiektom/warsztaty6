@@ -14,16 +14,16 @@
     <title>loginPage</title>
 </head>
 <body>
-
-<c:if test="${error != false}">
-    <p>${errorMsg}</p>
-</c:if>
-
-<form method="post" >
-    email: <input type="text" name="email"/><br>
-    password: <input type="password" name="password"/><br>
-    <input type="submit" value="Login"/>
-</form>
+<div>
+    <c:if test="${error != false}">
+        <p>${errorMsg}</p>
+    </c:if>
+    <form method="post">
+        email: <input type="text" name="email"/><br>
+        password: <input type="password" name="password"/><br>
+        <input type="submit" value="Login"/>
+    </form>
+</div>
 <a href="/user/add">Zarejestruj się</a>
 </body>
 </html>

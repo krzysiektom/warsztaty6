@@ -15,8 +15,8 @@
 </head>
 <body>
 
+<a href="/user/login">Login</a>
 <div>
-    <a href="/user/login">Login</a>
     <c:forEach items="${allTweets}" var="tweet">
         <div>
             <a>${tweet.user.firstName} ${tweet.user.lastName}</a><br>
