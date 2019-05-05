@@ -13,7 +13,6 @@
         <th>Nazwisko</th>
         <th>Emial</th>
         <th>Hasło</th>
-        <th>Akcje</th>
     </tr>
 
     <c:forEach items="${allUsers}" var="user">

@@ -9,6 +9,7 @@
 <body>
 <a>Witaj ${userName}</a>
 <a href="/tweet/user">User Tweets</a>
+<a href="/message/">User Messages</a>
 <a href="/user/page">User Page</a>
 <a href="/user/logout">Logout</a>
 <div>
