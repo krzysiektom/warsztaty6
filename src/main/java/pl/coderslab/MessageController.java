@@ -1,6 +1,5 @@
 package pl.coderslab;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,26 +10,27 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/message")
 public class MessageController {
-    final
-    MessageRepository messageRepository;
 
-    final
-    AuthHandler authHandler;
+    private MessageService messageService;
 
-    final
-    UserRepository userRepository;
+    private MessageRepository messageRepository;
 
-    public MessageController(MessageRepository messageRepository, AuthHandler authHandler, UserRepository userRepository) {
+    private AuthHandler authHandler;
+
+    private UserRepository userRepository;
+
+    public MessageController(MessageRepository messageRepository, AuthHandler authHandler, UserRepository userRepository, MessageService messageService) {
         this.messageRepository = messageRepository;
         this.authHandler = authHandler;
         this.userRepository = userRepository;
+        this.messageService = messageService;
     }
 
     @GetMapping("/")
     public String userMessages(Model model) {
         if (authHandler.isLogged()) {
-            model.addAttribute("senderMessages", messageRepository.getAllBySenderOrderByCreatedDesc(authHandler.getUser()));
-            model.addAttribute("receiverMessages", messageRepository.getAllByReceiverOrderByCreatedDesc(authHandler.getUser()));
+            model.addAttribute("senderMessages", messageService.getAllShortMessagesBySenderOrderByCreatedDesc(authHandler.getUser()));
+            model.addAttribute("receiverMessages", messageService.getAllShortMessagesByReceiverOrderByCreatedDesc(authHandler.getUser()));
             return "userMessages";
         } else {
             return "redirect:/tweet/all";
@@ -66,12 +66,15 @@ public class MessageController {
     }
 
     @GetMapping("/{id}")
-    public String messageDetails(@PathVariable Long id, Model model){
-        Message message=messageRepository.findOne(id);
-        message.setRead(true);
-        messageRepository.save(message);
-        model.addAttribute("message",message);
-        return "messagePage";
-
+    public String messageDetails(@PathVariable Long id, Model model) {
+        if (authHandler.isLogged()) {
+            Message message = messageRepository.findOne(id);
+            message.setRead(true);
+            messageRepository.save(message);
+            model.addAttribute("message", message);
+            return "messagePage";
+        } else {
+            return "redirect:/tweet/all";
+        }
     }
 }
