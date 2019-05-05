@@ -29,6 +29,10 @@ public class AuthHandler {
         this.id = id;
     }
 
+    public User getUser() {
+        return new User(id);
+    }
+
     public String getName() {
         return name;
     }

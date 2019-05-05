@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query("SELECT c FROM Comment c WHERE c.tweet.id =?1 order by c.created DESC ")
+    @Query(value = "SELECT * FROM comments WHERE tweet_id = ?1 ORDER BY created DESC", nativeQuery = true)
     List<Comment> getAllByTweetIdOrderByCreatedDesc(Long id);
 }

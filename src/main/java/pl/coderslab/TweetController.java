@@ -24,29 +24,17 @@ public class TweetController {
     @Autowired
     CommentRepository commentRepository;
 
-    @ModelAttribute("userName")
-    public String userName() {
-        return authHandler.getName();
-    }
-
-    @ModelAttribute("allTweets")
-    public List<Tweet> getAllTweets() {
-        return tweetRepository.getAllOrderByCreatedDesc();
-    }
-
-    @ModelAttribute("userAllTweets")
-    public List<Tweet> getUserAllTweets() {
-        return tweetRepository.getAllByUserIdOrderByCreatedDesc(1L);
-    }
-
     @GetMapping("/all")
-    public String showAllTweets() {
+    public String showAllTweets(Model model) {
+        model.addAttribute("allTweets", tweetRepository.getAllOrderByCreatedDesc());
         return "allTweets";
     }
 
     @GetMapping("/main")
     public String addForm(Model model) {
         if (authHandler.isLogged()) {
+            model.addAttribute("userName", authHandler.getName());
+            model.addAttribute("allTweets", tweetRepository.getAllOrderByCreatedDesc());
             Tweet tweet = new Tweet();
             model.addAttribute(tweet);
             return "mainPage";
@@ -56,9 +44,11 @@ public class TweetController {
     }
 
     @PostMapping("/main")
-    public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result) {
+    public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result, Model model) {
         if (authHandler.isLogged()) {
             if (result.hasErrors()) {
+                model.addAttribute("userName", authHandler.getName());
+                model.addAttribute("allTweets", tweetRepository.getAllOrderByCreatedDesc());
                 return "mainPage";
             }
             tweet.setUser(userRepository.findOne(authHandler.getId()));
@@ -83,9 +73,11 @@ public class TweetController {
     }
 
     @PostMapping("/{id}")
-    public String addComment(@ModelAttribute("comment") @Valid Comment comment, @PathVariable Long id, BindingResult result) {
+    public String addComment(@ModelAttribute("comment") @Valid Comment comment, BindingResult result, @PathVariable Long id, Model model) {
         if (authHandler.isLogged()) {
             if (result.hasErrors()) {
+                model.addAttribute("tweet", tweetRepository.findOne(id));
+                model.addAttribute("allComments", commentRepository.getAllByTweetIdOrderByCreatedDesc(id));
                 return "tweetPage";
             } else {
                 comment.setTweet(tweetRepository.findOne(id));
@@ -99,8 +91,9 @@ public class TweetController {
     }
 
     @GetMapping("/user")
-    public String userTweets() {
+    public String userTweets(Model model) {
         if (authHandler.isLogged()) {
+            model.addAttribute("userTweets", tweetRepository.findAllByUserOrderByCreatedDesc(authHandler.getUser()));
             return "userTweets";
         } else {
             return "redirect:/tweet/all";
