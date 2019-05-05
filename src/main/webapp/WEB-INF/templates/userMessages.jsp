@@ -5,6 +5,15 @@
 <html>
 <head>
     <title>messagePage</title>
+    <style>
+        a.normal {
+            font-weight: normal;
+        }
+
+        a.thick {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 <a href="/message/add">Send Message</a>
@@ -13,7 +22,8 @@
         <div>
             <a>${message.receiver.firstName} ${message.receiver.lastName}</a><br>
             <a>${message.created}</a><br>
-            <a>${message.text}</a> <a href="/message/${message.id}">Details</a>
+            <a class="${message.read?'normal':'thick'}">${message.text}</a> <a
+                href="/message/${message.id}">Details</a>
         </div>
     </c:forEach>
 </div>
@@ -23,7 +33,7 @@
         <div>
             <a>${message.sender.firstName} ${message.sender.lastName}</a><br>
             <a>${message.created}</a><br>
-            <a>${message.text}</a> <a href="/message/${message.id}">Details</a>
+            <a class="${message.read?'normal':'thick'}">${message.text}</a> <a href="/message/${message.id}">Details</a>
         </div>
     </c:forEach>
 </div>
