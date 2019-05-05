@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/message")
@@ -29,6 +30,7 @@ public class MessageController {
     @GetMapping("/")
     public String userMessages(Model model) {
         if (authHandler.isLogged()) {
+            model.addAttribute("localDateTimeFormat", DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy"));
             model.addAttribute("senderMessages", messageService.getAllShortMessagesBySenderOrderByCreatedDesc(authHandler.getUser()));
             model.addAttribute("receiverMessages", messageService.getAllShortMessagesByReceiverOrderByCreatedDesc(authHandler.getUser()));
             return "userMessages";

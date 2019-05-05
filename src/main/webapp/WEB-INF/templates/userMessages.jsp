@@ -21,7 +21,7 @@
     <c:forEach items="${senderMessages}" var="message">
         <div>
             <a>${message.receiver.firstName} ${message.receiver.lastName}</a><br>
-            <a>${message.created}</a><br>
+            <a>${localDateTimeFormat.format(message.created)}</a><br>
             <a class="${message.read?'normal':'thick'}">${message.text}</a> <a
                 href="/message/${message.id}">Details</a>
         </div>
@@ -32,7 +32,7 @@
     <c:forEach items="${receiverMessages}" var="message">
         <div>
             <a>${message.sender.firstName} ${message.sender.lastName}</a><br>
-            <a>${message.created}</a><br>
+            <a>${localDateTimeFormat.format(message.created)}</a><br>
             <a class="${message.read?'normal':'thick'}">${message.text}</a> <a href="/message/${message.id}">Details</a>
         </div>
     </c:forEach>
