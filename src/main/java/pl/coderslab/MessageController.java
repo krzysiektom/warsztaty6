@@ -11,14 +11,20 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/message")
 public class MessageController {
-    @Autowired
+    final
     MessageRepository messageRepository;
 
-    @Autowired
+    final
     AuthHandler authHandler;
 
-    @Autowired
+    final
     UserRepository userRepository;
+
+    public MessageController(MessageRepository messageRepository, AuthHandler authHandler, UserRepository userRepository) {
+        this.messageRepository = messageRepository;
+        this.authHandler = authHandler;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/")
     public String userMessages(Model model) {
@@ -36,7 +42,7 @@ public class MessageController {
         if (authHandler.isLogged()) {
             Message message = new Message();
             model.addAttribute(message);
-            model.addAttribute("receiverUsers", userRepository.findAll());
+            model.addAttribute("receiverUsers", userRepository.findAllWithOutUser(authHandler.getUser()));
 
             return "formMessage";
         } else {
@@ -48,7 +54,7 @@ public class MessageController {
     public String addMessage(@ModelAttribute("message") @Valid Message message, BindingResult result, Model model) {
         if (authHandler.isLogged()) {
             if (result.hasErrors()) {
-                model.addAttribute("receiverUsers", userRepository.findAll().remove(authHandler.getUser()));
+                model.addAttribute("receiverUsers", userRepository.findAllWithOutUser(authHandler.getUser()));
                 return "formMessage";
             }
             message.setSender(authHandler.getUser());
@@ -61,7 +67,10 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public String messageDetails(@PathVariable Long id, Model model){
-        model.addAttribute("message",messageRepository.findOne(id));
+        Message message=messageRepository.findOne(id);
+        message.setRead(true);
+        messageRepository.save(message);
+        model.addAttribute("message",message);
         return "messagePage";
 
     }
