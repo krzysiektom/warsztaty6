@@ -11,7 +11,9 @@
     <c:forEach items="${userTweets}" var="tweet">
         <div>
             <a>${tweet.created}</a><br>
-            <a>${tweet.text}</a> <a href="/tweet/${tweet.id}">Details</a>
+            <a>${tweet.text}</a><br>
+            <a>Comments: ${commentRepository.getNoOfComments(tweet.id)}</a> <a href="/tweet/${tweet.id}">Details</a>
+
         </div>
     </c:forEach>
 </div>

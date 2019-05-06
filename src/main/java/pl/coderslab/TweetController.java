@@ -94,6 +94,7 @@ public class TweetController {
     public String userTweets(Model model) {
         if (authHandler.isLogged()) {
             model.addAttribute("userTweets", tweetRepository.findAllByUserOrderByCreatedDesc(authHandler.getUser()));
+            model.addAttribute("commentRepository",commentRepository);
             return "userTweets";
         } else {
             return "redirect:/tweet/all";
