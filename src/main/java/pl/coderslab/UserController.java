@@ -1,39 +1,25 @@
 package pl.coderslab;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @Autowired
-    AuthHandler authHandler;
+    private AuthHandler authHandler;
 
-    @ModelAttribute(name = "userName", value = "userName")
-    public String userName() {
-        return authHandler.getName();
-    }
-
-    @ModelAttribute("allUsers")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping("/all")
-    public String showAllUsers() {
-        return "allUsers";
+    public UserController(UserRepository userRepository, UserService userService, AuthHandler authHandler) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.authHandler = authHandler;
     }
 
     @GetMapping("/add")
@@ -66,7 +52,7 @@ public class UserController {
             model.addAttribute("user", user);
             return "formUser";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -86,7 +72,7 @@ public class UserController {
                 return "formUser";
             }
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -95,13 +81,13 @@ public class UserController {
         if (authHandler.isLogged()) {
             userRepository.delete(authHandler.getId());
         }
-        return "redirect:/tweet/all";
+        return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout() {
         authHandler.setLogged(false);
-        return "redirect:/tweet/all";
+        return "redirect:/";
     }
 
     @PostMapping("/login")
@@ -127,7 +113,7 @@ public class UserController {
         if (authHandler.isLogged()) {
             return "userPage";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 }

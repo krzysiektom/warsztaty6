@@ -80,7 +80,7 @@ public class MessageController {
                 return "redirect:/message/";
             }
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 }

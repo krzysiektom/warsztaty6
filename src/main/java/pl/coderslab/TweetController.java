@@ -1,28 +1,29 @@
 package pl.coderslab;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/tweet")
 public class TweetController {
-    @Autowired
-    TweetRepository tweetRepository;
+    private TweetRepository tweetRepository;
 
-    @Autowired
-    AuthHandler authHandler;
+    private AuthHandler authHandler;
 
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
+
+    public TweetController(TweetRepository tweetRepository, AuthHandler authHandler, UserRepository userRepository, CommentRepository commentRepository) {
+        this.tweetRepository = tweetRepository;
+        this.authHandler = authHandler;
+        this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
+    }
 
     @GetMapping("/all")
     public String showAllTweets(Model model) {
@@ -39,7 +40,7 @@ public class TweetController {
             model.addAttribute(tweet);
             return "mainPage";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -55,7 +56,7 @@ public class TweetController {
             tweetRepository.save(tweet);
             return "redirect:/tweet/main";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -94,7 +95,7 @@ public class TweetController {
     public String userTweets(Model model) {
         if (authHandler.isLogged()) {
             model.addAttribute("userTweets", tweetRepository.findAllByUserOrderByCreatedDesc(authHandler.getUser()));
-            model.addAttribute("commentRepository",commentRepository);
+            model.addAttribute("commentRepository", commentRepository);
             return "userTweets";
         } else {
             return "redirect:/tweet/all";

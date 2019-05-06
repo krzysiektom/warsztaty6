@@ -9,8 +9,5 @@
 <body>
 <a href="/user/login">Login</a><br>
 <a href="/user/add">Register</a><br>
-
-<a href="/user/all">All User</a><br>
-
 </body>
 </html>
