@@ -71,10 +71,14 @@ public class MessageController {
     public String messageDetails(@PathVariable Long id, Model model) {
         if (authHandler.isLogged()) {
             Message message = messageRepository.findOne(id);
-            message.setRead(true);
-            messageRepository.save(message);
-            model.addAttribute("message", message);
-            return "messagePage";
+            if (message.getSender().getId().equals(authHandler.getId()) || message.getReceiver().getId().equals(authHandler.getId())) {
+                message.setRead(true);
+                messageRepository.save(message);
+                model.addAttribute("message", message);
+                return "messagePage";
+            } else {
+                return "redirect:/message/";
+            }
         } else {
             return "redirect:/tweet/all";
         }
