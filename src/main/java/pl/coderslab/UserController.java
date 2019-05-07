@@ -37,7 +37,7 @@ public class UserController {
         if (userService.isNotExistEmail(user)) {
             userRepository.save(user);
             userService.setSession(user);
-            return "redirect:/user/page";
+            return "redirect:/tweet/main";
         } else {
             model.addAttribute("error", true);
             model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");
@@ -62,10 +62,11 @@ public class UserController {
             if (result.hasErrors()) {
                 return "formUser";
             }
-            if (userService.validateEditUser(user)) {
+            if (userService.isNotExistAnotherUserWithEmail(user)) {
+                user.setId(authHandler.getId());
                 userRepository.save(user);
                 userService.setSession(user);
-                return "redirect:/";
+                return "redirect:/tweet/main";
             } else {
                 model.addAttribute("error", true);
                 model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");

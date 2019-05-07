@@ -6,37 +6,61 @@
 <head>
     <title>messagePage</title>
     <style>
-        a.normal {
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        td.normal {
             font-weight: normal;
         }
 
-        a.thick {
+        td.thick {
             font-weight: bold;
         }
     </style>
 </head>
 <body>
 <%@include file="fragments/header.jsp" %>
-<a href="/message/add">Send Message</a>
-<div>Sent messages
+<div>
+    <a href="/message/add">Send new message</a>
+</div>
+<table><b>Sent messages:</b>
+    <tr>
+        <th>To</th>
+        <th>When</th>
+        <th>Text</th>
+        <th>Action</th>
+    </tr>
     <c:forEach items="${senderMessages}" var="message">
-        <div>
-            <a>${message.receiver.firstName} ${message.receiver.lastName}</a><br>
-            <a>${localDateTimeFormat.format(message.created)}</a><br>
-            <a class="${message.read?'normal':'thick'}">${message.text}</a> <a
-                href="/message/${message.id}">Details</a>
-        </div>
+        <tr>
+            <td>${message.receiver.firstName} ${message.receiver.lastName}</td>
+            <td>${localDateTimeFormat.format(message.created)}</td>
+            <td>${message.text}</td>
+            <td><a href="/message/${message.id}">Details</a></td>
+        </tr>
     </c:forEach>
-</div>
+</table>
 
-<div>Received messages
+<table><b>Received messages:</b>
+    <tr>
+        <th>From</th>
+        <th>When</th>
+        <th>Text</th>
+        <th>Action</th>
+    </tr>
     <c:forEach items="${receiverMessages}" var="message">
-        <div>
-            <a>${message.sender.firstName} ${message.sender.lastName}</a><br>
-            <a>${localDateTimeFormat.format(message.created)}</a><br>
-            <a class="${message.read?'normal':'thick'}">${message.text}</a> <a href="/message/${message.id}">Details</a>
-        </div>
+        <tr>
+            <td>${message.sender.firstName} ${message.sender.lastName}</td>
+            <td>${localDateTimeFormat.format(message.created)}</td>
+            <td class="${message.read?'normal':'thick'}">${message.text}</td>
+            <td><a href="/message/${message.id}">Details</a></td>
+        </tr>
     </c:forEach>
-</div>
+</table>
+
 </body>
 </html>

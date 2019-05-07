@@ -11,8 +11,7 @@
 <div>
     <a>Sender: ${message.sender.firstName} ${message.sender.lastName}</a><br>
     <a>Receiver: ${message.receiver.firstName} ${message.receiver.lastName}</a><br>
-    <a>${message.created}</a><br>
-    <a>${message.text}</a>
+    <a>Text: ${message.text}</a>
 </div>
 </body>
 </html>

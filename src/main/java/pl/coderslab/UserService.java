@@ -32,8 +32,8 @@ public class UserService {
         return null == user;
     }
 
-    boolean validateEditUser(User userValidate) {
+    boolean isNotExistAnotherUserWithEmail(User userValidate) {
         User user = userRepository.findByEmail(userValidate.getEmail());
-        return null == user || userValidate.getId().equals(user.getId());
+        return null == user || authHandler.getId().equals(user.getId());
     }
 }

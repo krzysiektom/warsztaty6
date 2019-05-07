@@ -72,8 +72,10 @@ public class MessageController {
         if (authHandler.isLogged()) {
             Message message = messageRepository.findOne(id);
             if (message.getSender().getId().equals(authHandler.getId()) || message.getReceiver().getId().equals(authHandler.getId())) {
-                message.setRead(true);
-                messageRepository.save(message);
+                if (message.getReceiver().getId().equals(authHandler.getId())) {
+                    message.setRead(true);
+                    messageRepository.save(message);
+                }
                 model.addAttribute("message", message);
                 return "messagePage";
             } else {
