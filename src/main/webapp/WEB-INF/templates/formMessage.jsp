@@ -7,6 +7,8 @@
     <title>formMessage</title>
 </head>
 <body>
+<%@include file="fragments/header.jsp" %>
+
 <form:form method="post" modelAttribute="message">
     <form:errors path="receiver" /><br>
     receiver: <form:select path="receiver" items="${receiverUsers}" itemLabel="lastName" itemValue="id"/><br>

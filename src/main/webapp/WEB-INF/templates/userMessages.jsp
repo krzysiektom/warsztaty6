@@ -16,6 +16,7 @@
     </style>
 </head>
 <body>
+<%@include file="fragments/header.jsp" %>
 <a href="/message/add">Send Message</a>
 <div>Sent messages
     <c:forEach items="${senderMessages}" var="message">

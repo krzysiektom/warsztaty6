@@ -7,6 +7,8 @@
     <title>userPage</title>
 </head>
 <body>
+<%@include file="fragments/header.jsp" %>
+
 <a href="/user/edit">Edit User</a><br>
 <a href="/user/delete">Delete User</a><br>
 

@@ -69,7 +69,7 @@ public class TweetController {
             model.addAttribute("allComments", commentRepository.getAllByTweetIdOrderByCreatedDesc(id));
             return "tweetPage";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -87,7 +87,7 @@ public class TweetController {
                 return "redirect:/tweet/{id}";
             }
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -98,7 +98,7 @@ public class TweetController {
             model.addAttribute("commentRepository", commentRepository);
             return "userTweets";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 }

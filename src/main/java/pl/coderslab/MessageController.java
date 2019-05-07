@@ -35,7 +35,7 @@ public class MessageController {
             model.addAttribute("receiverMessages", messageService.getAllShortMessagesByReceiverOrderByCreatedDesc(authHandler.getUser()));
             return "userMessages";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -48,7 +48,7 @@ public class MessageController {
 
             return "formMessage";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 
@@ -63,7 +63,7 @@ public class MessageController {
             messageRepository.save(message);
             return "redirect:/message/";
         } else {
-            return "redirect:/tweet/all";
+            return "redirect:/";
         }
     }
 

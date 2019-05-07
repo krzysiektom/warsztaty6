@@ -7,10 +7,7 @@
     <title>mainPage</title>
 </head>
 <body>
-<a href="/tweet/user">User Tweets</a>
-<a href="/message/">User Messages</a>
-<a href="/user/page">User Page</a>
-<a href="/user/logout">Logout</a>
+<%@include file="fragments/header.jsp" %>
 <div>
     <form:form method="post" modelAttribute="tweet">
         <form:errors path="text"/><br>

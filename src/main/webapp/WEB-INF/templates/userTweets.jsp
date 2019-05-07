@@ -7,7 +7,9 @@
     <title>UserTweets</title>
 </head>
 <body>
-<div>
+<%@include file="fragments/header.jsp" %>
+
+<div>User tweets
     <c:forEach items="${userTweets}" var="tweet">
         <div>
             <a>${tweet.created}</a><br>

@@ -17,6 +17,6 @@
         <input type="submit" value="Login"/>
     </form>
 </div>
-<a href="/user/add">Zarejestruj się</a>
+<a href="/user/add">Register</a>
 </body>
 </html>

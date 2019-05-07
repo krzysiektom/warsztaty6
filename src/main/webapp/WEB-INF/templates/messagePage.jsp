@@ -7,6 +7,7 @@
     <title>messagePage</title>
 </head>
 <body>
+<%@include file="fragments/header.jsp" %>
 <div>
     <a>Sender: ${message.sender.firstName} ${message.sender.lastName}</a><br>
     <a>Receiver: ${message.receiver.firstName} ${message.receiver.lastName}</a><br>

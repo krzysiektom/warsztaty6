@@ -7,6 +7,7 @@
     <title>TweetPage</title>
 </head>
 <body>
+<%@include file="fragments/header.jsp" %>
 <div>
     <a>${tweet.user.firstName} ${tweet.user.lastName}</a><br>
     <a>${tweet.created}</a><br>
