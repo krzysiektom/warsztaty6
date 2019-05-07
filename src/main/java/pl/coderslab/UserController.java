@@ -40,7 +40,7 @@ public class UserController {
             return "redirect:/tweet/main";
         } else {
             model.addAttribute("error", true);
-            model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");
+            model.addAttribute("errorMsg", "User with this email exists");
             return "formUser";
         }
     }
@@ -69,7 +69,7 @@ public class UserController {
                 return "redirect:/tweet/main";
             } else {
                 model.addAttribute("error", true);
-                model.addAttribute("errorMsg", "Użytkownik o takim emailu już istnieje");
+                model.addAttribute("errorMsg", "User with this email exists");
                 return "formUser";
             }
         } else {
@@ -91,22 +91,20 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/login")
+    public String loginForm() {
+        return "loginPage";
+    }
+
     @PostMapping("/login")
     public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         if (userService.validateUserAndSetSession(email, password)) {
             return "redirect:/tweet/main";
         } else {
             model.addAttribute("error", true);
-            model.addAttribute("errorMsg", "Błędny login lub hasło");
+            model.addAttribute("errorMsg", "Wrong login or password");
             return "loginPage";
         }
-    }
-
-    @GetMapping("/login")
-    public String loginForm(Model model) {
-        User user = new User();
-        model.addAttribute(user);
-        return "loginPage";
     }
 
     @GetMapping("/page")
