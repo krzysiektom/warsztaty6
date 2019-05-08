@@ -1,41 +1,40 @@
-package pl.coderslab;
+package pl.coderslab.tweet;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.AuthHandler;
+import pl.coderslab.comment.Comment;
+import pl.coderslab.comment.CommentRepository;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/tweet")
 public class TweetController {
-    private TweetRepository tweetRepository;
+    private final TweetRepository tweetRepository;
 
-    private AuthHandler authHandler;
+    private final AuthHandler authHandler;
 
-    private UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
-    private CommentRepository commentRepository;
-
-    public TweetController(TweetRepository tweetRepository, AuthHandler authHandler, UserRepository userRepository, CommentRepository commentRepository) {
+    public TweetController(TweetRepository tweetRepository, AuthHandler authHandler, CommentRepository commentRepository) {
         this.tweetRepository = tweetRepository;
         this.authHandler = authHandler;
-        this.userRepository = userRepository;
         this.commentRepository = commentRepository;
     }
 
     @GetMapping("/all")
     public String showAllTweets(Model model) {
-        model.addAttribute("allTweets", tweetRepository.getAllOrderByCreatedDesc());
+        model.addAttribute("allTweets", tweetRepository.getAllByOrderByCreatedDesc());
         return "allTweets";
     }
 
     @GetMapping("/main")
     public String addForm(Model model) {
         if (authHandler.isLogged()) {
-            model.addAttribute("userName", authHandler.getName());
-            model.addAttribute("allTweets", tweetRepository.getAllOrderByCreatedDesc());
+            model.addAttribute("allTweets", tweetRepository.getAllByOrderByCreatedDesc());
             Tweet tweet = new Tweet();
             model.addAttribute(tweet);
             return "mainPage";
@@ -48,11 +47,10 @@ public class TweetController {
     public String addTweet(@ModelAttribute("tweet") @Valid Tweet tweet, BindingResult result, Model model) {
         if (authHandler.isLogged()) {
             if (result.hasErrors()) {
-                model.addAttribute("userName", authHandler.getName());
-                model.addAttribute("allTweets", tweetRepository.getAllOrderByCreatedDesc());
+                model.addAttribute("allTweets", tweetRepository.getAllByOrderByCreatedDesc());
                 return "mainPage";
             }
-            tweet.setUser(userRepository.findOne(authHandler.getId()));
+            tweet.setUser(authHandler.getUser());
             tweetRepository.save(tweet);
             return "redirect:/tweet/main";
         } else {
@@ -63,10 +61,11 @@ public class TweetController {
     @GetMapping("/{id}")
     public String tweetDetails(@PathVariable Long id, Model model) {
         if (authHandler.isLogged()) {
-            model.addAttribute("tweet", tweetRepository.findOne(id));
+            Tweet tweet = tweetRepository.findOne(id);
+            model.addAttribute("tweet", tweet);
             Comment comment = new Comment();
             model.addAttribute(comment);
-            model.addAttribute("allComments", commentRepository.getAllByTweetIdOrderByCreatedDesc(id));
+            model.addAttribute("allComments", commentRepository.getAllByTweetOrderByCreatedDesc(tweet));
             return "tweetPage";
         } else {
             return "redirect:/";
@@ -76,13 +75,14 @@ public class TweetController {
     @PostMapping("/{id}")
     public String addComment(@ModelAttribute("comment") @Valid Comment comment, BindingResult result, @PathVariable Long id, Model model) {
         if (authHandler.isLogged()) {
+            Tweet tweet = tweetRepository.findOne(id);
             if (result.hasErrors()) {
-                model.addAttribute("tweet", tweetRepository.findOne(id));
-                model.addAttribute("allComments", commentRepository.getAllByTweetIdOrderByCreatedDesc(id));
+                model.addAttribute("tweet", tweet);
+                model.addAttribute("allComments", commentRepository.getAllByTweetOrderByCreatedDesc(tweet));
                 return "tweetPage";
             } else {
-                comment.setTweet(tweetRepository.findOne(id));
-                comment.setUser(userRepository.findOne(authHandler.getId()));
+                comment.setTweet(tweet);
+                comment.setUser(authHandler.getUser());
                 commentRepository.save(comment);
                 return "redirect:/tweet/{id}";
             }

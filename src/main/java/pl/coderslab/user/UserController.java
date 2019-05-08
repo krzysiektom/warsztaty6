@@ -1,23 +1,21 @@
-package pl.coderslab;
+package pl.coderslab.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.AuthHandler;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private UserRepository userRepository;
+    private final UserService userService;
 
-    private UserService userService;
+    private final AuthHandler authHandler;
 
-    private AuthHandler authHandler;
-
-    public UserController(UserRepository userRepository, UserService userService, AuthHandler authHandler) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService, AuthHandler authHandler) {
         this.userService = userService;
         this.authHandler = authHandler;
     }
@@ -35,7 +33,7 @@ public class UserController {
             return "formUser";
         }
         if (userService.isNotExistEmail(user)) {
-            userRepository.save(user);
+            userService.save(user);
             userService.setSession(user);
             return "redirect:/tweet/main";
         } else {
@@ -48,7 +46,7 @@ public class UserController {
     @GetMapping("/edit")
     public String editForm(Model model) {
         if (authHandler.isLogged()) {
-            User user = userRepository.findOne(authHandler.getId());
+            User user = authHandler.getUser();
             model.addAttribute("user", user);
             return "formUser";
         } else {
@@ -64,7 +62,7 @@ public class UserController {
             }
             if (userService.isNotExistAnotherUserWithEmail(user)) {
                 user.setId(authHandler.getId());
-                userRepository.save(user);
+                userService.save(user);
                 userService.setSession(user);
                 return "redirect:/tweet/main";
             } else {
@@ -80,7 +78,7 @@ public class UserController {
     @GetMapping("/delete")
     public String deleteUser() {
         if (authHandler.isLogged()) {
-            userRepository.delete(authHandler.getId());
+            userService.delete(authHandler.getId());
         }
         return "redirect:/";
     }

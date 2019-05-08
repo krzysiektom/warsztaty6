@@ -1,4 +1,4 @@
-package pl.coderslab;
+package pl.coderslab.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

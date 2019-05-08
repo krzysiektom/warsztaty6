@@ -13,7 +13,7 @@
     <c:forEach items="${userTweets}" var="tweet">
         <div>
             <a>Text: ${tweet.text}</a>
-            <a>Comments: ${commentRepository.getNoOfComments(tweet.id)}</a> <a href="/tweet/${tweet.id}">Details</a>
+            <a>Comments: ${commentRepository.countByTweet(tweet)}</a> <a href="/tweet/${tweet.id}">Details</a>
         </div>
     </c:forEach>
 </div>
