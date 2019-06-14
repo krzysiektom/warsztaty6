@@ -1,6 +1,6 @@
 # Twitter
 
-Full and functional Twitter-style application
+Full functional Twitter-style application
 
 The application has implemented the following functionalities:
 
