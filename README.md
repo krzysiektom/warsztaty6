@@ -2,7 +2,7 @@
 
 Full functional Twitter-style application
 
-The application has implemented the following functionalities:
+### The application has implemented the following functionalities:
 
 **Users**: adding, modifying non-key information about yourself, deleting your account. 
 The user is identified by a unique email (can not be repeated).
